@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact — AutoHaven</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <div class="header"></div>
+  <main class="container">
+    <h1 class="title">Customer Care & Enquiries</h1>
+    <p class="note">Email: <b>support@autohaven.com</b> • Hotline: <b>+1‑800‑AUTO‑HVN</b></p>
+    <form class="card p" id="contactForm">
+      <input class="input" name="name" placeholder="Full Name" required>
+      <input class="input" type="email" name="email" placeholder="Email" required>
+      <input class="input" name="subject" placeholder="Subject" required>
+      <textarea class="input" name="message" placeholder="How can we help?" rows="6" required></textarea>
+      <button class="btn" type="submit" style="margin-top:10px">Send message</button>
+    </form>
+    <div id="contactMsg" class="note" style="margin-top:10px"></div>
+  </main>
+  <footer class="footer"><div class="container">© 2025 AutoHaven</div></footer>
+  <script>
+    // To receive emails, set your Formspree endpoint below, e.g. "https://formspree.io/f/xxxxxxx"
+    const FORMSPREE_ENDPOINT = null;
+    document.getElementById('contactForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const msg = document.getElementById('contactMsg');
+      const data = Object.fromEntries(new FormData(e.target).entries());
+      if(!FORMSPREE_ENDPOINT){
+        msg.textContent = '✅ Message captured (demo). Connect Formspree to send to your email.';
+        console.log('Contact form data:', data);
+        e.target.reset();
+        return;
+      }
+      try{
+        const res = await fetch(FORMSPREE_ENDPOINT, {{ 'method':'POST', 'headers':{{'Accept':'application/json'}}, 'body': new FormData(e.target) }});
+        if(res.ok){ msg.textContent = '✅ Message sent. We will reply shortly.'; e.target.reset(); }
+        else { msg.textContent = '❌ Could not send. Please try again later.'; }
+      }catch(err){ msg.textContent = '❌ Network error. Please try again.'; }
+    });
+  </script>
+</body>
+</html>
